@@ -79,6 +79,7 @@ interface StoreState {
   addToWishlist: (product: Product) => void;
   removeFromWishlist: (productId: string) => void;
   isInWishlist: (productId: string) => boolean;
+  clearWishlist: () => void;
 
   // Toast
   showToast: (message: string, type?: Toast['type']) => void;
@@ -249,6 +250,10 @@ export const useStore = create<StoreState>()(
       },
 
       isInWishlist: (productId) => !!get().wishlist.find(i => i.id === productId),
+      clearWishlist: () => {
+        set({ wishlist: [] });
+        get().showToast('Wishlist cleared', 'info');
+      },
 
       // ── Toast ─────────────────────────────────────────────────────────────
 
