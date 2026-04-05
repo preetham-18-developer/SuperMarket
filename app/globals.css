@@ -703,3 +703,36 @@ h1, h2, h3, h4, h5, h6, .section-title {
   transition: opacity 0.15s ease-out;
 }
 
+
+/* ─── MOBILE TOUCH FIXES ─────────────────────────────────────────────────── */
+
+/* Ensure all buttons respond instantly on mobile */
+button, a, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* On mobile, perf-gpu perspective can cause 3D layer reordering issues.
+   Disable the 3D perspective on small screens while keeping GPU compositing. */
+@media (max-width: 768px) {
+  .perf-gpu {
+    perspective: none !important;
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+
+  /* Ensure content-visibility auto doesn't clip animation triggers */
+  .content-visibility-auto {
+    content-visibility: visible;
+    contain-intrinsic-size: unset;
+  }
+}
+
+/* Minimum touch target size for accessibility */
+@media (hover: none) and (pointer: coarse) {
+  .card button,
+  section button {
+    min-height: 44px;
+  }
+}

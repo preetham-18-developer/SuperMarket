@@ -82,7 +82,7 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: showIntro ? 0 : 1 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="max-w-[1400px] mx-auto px-4 lg:px-8 space-y-20 pb-24 perf-gpu no-scroll-jank"
+        className="max-w-[1400px] mx-auto px-4 lg:px-8 space-y-20 pb-24 no-scroll-jank"
       >
 
 
@@ -163,13 +163,15 @@ export default function Home() {
             {/* Nav arrows */}
             <button
               onClick={() => setBannerIdx((bannerIdx - 1 + BANNERS.length) % BANNERS.length)}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-all"
+              style={{ touchAction: 'manipulation' }}
+              className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 active:bg-white/50 transition-all z-10"
             >
               <ChevronLeft size={20} />
             </button>
             <button
               onClick={() => setBannerIdx((bannerIdx + 1) % BANNERS.length)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-all"
+              style={{ touchAction: 'manipulation' }}
+              className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 active:bg-white/50 transition-all z-10"
             >
               <ChevronRight size={20} />
             </button>
@@ -281,18 +283,49 @@ export default function Home() {
       </section>
 
       {/* ─── BROWSE BY CATEGORY (filtered grid) ──── */}
-      <section id="browse-products" className="space-y-6 content-visibility-auto pt-10 border-t border-border-custom/50">
+      <section id="browse-products" className="space-y-6 pt-10 border-t border-border-custom/50">
         <div>
           <h2 className="section-title">Browse All Products</h2>
           <p className="section-subtitle">Filter by category to find what you need</p>
         </div>
-        <AnimatePresence>
+
+        {/* Category filter pills */}
+        <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={() => setActiveCategory('all')}
+            style={{ touchAction: 'manipulation' }}
+            className={`px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider border transition-all ${
+              activeCategory === 'all'
+                ? 'bg-primary text-white border-primary shadow-sm'
+                : 'bg-white text-warm-gray border-border-custom hover:border-primary/40 hover:text-primary'
+            }`}
+          >
+            All
+          </button>
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              style={{ touchAction: 'manipulation' }}
+              className={`px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider border transition-all flex items-center gap-1.5 ${
+                activeCategory === cat.id
+                  ? 'bg-primary text-white border-primary shadow-sm'
+                  : 'bg-white text-warm-gray border-border-custom hover:border-primary/40 hover:text-primary'
+              }`}
+            >
+              <span>{cat.icon}</span>
+              <span>{cat.name.split(' ')[0]}</span>
+            </button>
+          ))}
+        </div>
+
+        <AnimatePresence mode="wait">
           <motion.div
             key={activeCategory}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
             className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
           >
             {categoryProducts.map((p) => <ProductCard key={p.id} product={p} />)}
@@ -307,7 +340,7 @@ export default function Home() {
       </section>
 
       {/* ─── WHY SHOP WITH US ──────────────────────── */}
-      <section className="bg-cream-200 rounded-[2rem] p-8 md:p-14 space-y-8 content-visibility-auto">
+      <section className="bg-cream-200 rounded-[2rem] p-8 md:p-14 space-y-8">
         <div className="text-center space-y-2">
           <h2 className="section-title">Why Supermarket?</h2>
           <p className="section-subtitle">We&apos;re not just a store — we&apos;re your kitchen partner</p>
@@ -319,19 +352,15 @@ export default function Home() {
             { icon: <Clock size={24} className="text-primary" />, title: 'Always Open', desc: 'Shop 24/7, 365 days a year. We never close.' },
             { icon: <Star size={24} className="text-primary" fill="#ff6b00" />, title: 'Premium Selection', desc: 'Hand-picked products from trusted brands and farms.' },
           ].map((item, i) => (
-            <motion.div
+            <div
               key={i}
-              custom={i}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
               className="card p-6 text-center space-y-3"
+              style={{ animationDelay: `${i * 0.08}s` }}
             >
               <div className="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center mx-auto">{item.icon}</div>
               <h3 className="font-black text-warm-dark">{item.title}</h3>
               <p className="text-sm text-foreground-muted leading-relaxed">{item.desc}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
@@ -351,7 +380,7 @@ export default function Home() {
       </section>
 
       {/* ─── TESTIMONIALS ──────────────────────────── */}
-      <section className="space-y-8 content-visibility-auto">
+      <section className="space-y-8">
         <div className="text-center space-y-2">
           <h2 className="section-title">What our shoppers say</h2>
           <p className="section-subtitle">Trusted by 12,000+ happy customers</p>
@@ -362,13 +391,8 @@ export default function Home() {
             { name: 'Arjun S.', city: 'Bangalore', rating: 5, text: 'Orders arrive in under 20 minutes. The quality is consistently premium and the app is so easy to use.' },
             { name: 'Kavya R.', city: 'Hyderabad', rating: 5, text: 'Supermarket has completely replaced my weekly trips. Everything I need, delivered before I even miss it.' },
           ].map((t, i) => (
-            <motion.div
+            <div
               key={i}
-              custom={i}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
               className="card p-6 space-y-4"
             >
               <div className="flex">
@@ -381,7 +405,7 @@ export default function Home() {
                 <p className="font-bold text-warm-dark text-sm">{t.name}</p>
                 <p className="text-xs text-foreground-muted">{t.city}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>

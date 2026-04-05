@@ -44,7 +44,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.4 }}
-      className={`perf-gpu relative group rounded-[1.75rem] border border-border-custom overflow-hidden flex flex-col ${bgClass} transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_16px_48px_-12px_rgba(255,107,0,0.18)] ${oos ? 'opacity-75' : ''}`}
+      className={`relative group rounded-[1.75rem] border border-border-custom overflow-hidden flex flex-col ${bgClass} transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_16px_48px_-12px_rgba(255,107,0,0.18)] ${oos ? 'opacity-75' : ''}`}
     >
       {/* Discount ribbon */}
       {disc > 0 && <div className="discount-ribbon">{disc}% OFF</div>}
@@ -52,7 +52,8 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* Wishlist btn */}
       <button
         onClick={(e) => { e.preventDefault(); addToWishlist(product); }}
-        className={`absolute top-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm ${
+        style={{ touchAction: 'manipulation' }}
+        className={`absolute top-3 right-3 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all shadow-sm ${
           inWishlist ? 'bg-red-500 text-white' : 'bg-white/80 backdrop-blur-sm text-warm-gray hover:bg-red-50 hover:text-red-500'
         }`}
       >
@@ -125,14 +126,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* CTA */}
-        <motion.button
-          whileTap={{ scale: 0.96 }}
+        <button
           disabled={oos}
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); addToCart(product); }}
-          className={`mt-auto w-full py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all border ${
+          style={{ touchAction: 'manipulation' }}
+          className={`mt-auto w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all border ${
             oos
               ? 'bg-sand-100 text-foreground-muted border-border-custom cursor-not-allowed'
-              : 'bg-white border-border-custom hover:bg-primary hover:text-white hover:border-primary hover:shadow-md shadow-sm text-warm-dark'
+              : 'bg-white border-border-custom active:bg-primary active:text-white active:border-primary hover:bg-primary hover:text-white hover:border-primary hover:shadow-md shadow-sm text-warm-dark'
           }`}
         >
           {oos ? (
@@ -140,7 +141,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           ) : (
             <><ShoppingCart size={14} /> Add to Cart</>
           )}
-        </motion.button>
+        </button>
       </div>
     </motion.div>
   );
