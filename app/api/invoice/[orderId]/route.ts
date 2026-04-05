@@ -9,9 +9,9 @@ import { ORDERS } from '@/lib/data';
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { orderId: string } }
+  { params }: { params: Promise<{ orderId: string }> }
 ) {
-  const { orderId } = params;
+  const { orderId } = await params;
   
   // Find order in mock data (or replace with DB call)
   const order = ORDERS.find(o => o.id.includes(orderId.replace('SM-', ''))) || ORDERS[0];
