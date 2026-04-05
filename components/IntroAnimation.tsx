@@ -45,7 +45,7 @@ export function IntroAnimation({ onComplete }: { onComplete: () => void }) {
            >
               <div className="relative w-24 h-24 mx-auto mb-6">
                 <Image 
-                  src="file:///C:/Users/PREETHAM/.gemini/antigravity/brain/5f275479-e7aa-450c-a71a-cb5d704f0d67/supermarket_premium_logo_1775370113128.png"
+                  src="/assets/brand/logo-premium.png"
                   alt="SuperMarket Premium Logo"
                   fill
                   className="object-contain"

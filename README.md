@@ -1,6 +1,6 @@
 # 🌌 SuperMarket — Premium Grocery SaaS ✨
 
-![SuperMarket Hero Banner](file:///C:/Users/PREETHAM/.gemini/antigravity/brain/5f275479-e7aa-450c-a71a-cb5d704f0d67/supermarket_hero_banner_1775370037981.png)
+![SuperMarket Hero Banner](./public/assets/brand/hero-banner.png)
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-Auth%20%26%20Database-blueviolet?style=for-the-badge&logo=supabase)](https://supabase.com/)
