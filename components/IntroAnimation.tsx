@@ -43,15 +43,6 @@ export function IntroAnimation({ onComplete }: { onComplete: () => void }) {
               transition={{ duration: 1, ease: "easeOut" }}
               className="text-center"
            >
-              <div className="relative w-24 h-24 mx-auto mb-6">
-                <Image 
-                  src="/assets/brand/logo-premium.png"
-                  alt="SuperMarket Premium Logo"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
               <h1 className="bg-gradient-to-br from-white to-orange-400 py-4 bg-clip-text text-center text-5xl font-black tracking-tight text-transparent">
                  SuperMarket
               </h1>

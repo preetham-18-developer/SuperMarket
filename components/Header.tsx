@@ -120,14 +120,9 @@ export default function Header() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 shrink-0 group mr-2">
-              <div className="relative w-10 h-10 group-hover:scale-105 transition-transform duration-200">
-                <Image 
-                  src="/assets/brand/logo-premium.png"
-                  alt="SuperMarket Premium Logo"
-                  fill
-                  className="object-contain"
-                  priority
-                />
+              <div className="relative w-9 h-9 bg-primary-gradient rounded-xl flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-200">
+                <ShoppingCart size={18} className="text-white" strokeWidth={2.5} />
+                <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-orange-300 rounded-full border-2 border-white" />
               </div>
               <div className="hidden sm:block">
                 <div className="font-black text-lg leading-none tracking-tight text-warm-dark" style={{ fontFamily: 'Times New Roman, serif' }}>
@@ -221,13 +216,7 @@ export default function Header() {
                         className="flex items-center gap-3 px-4 py-3 hover:bg-cream-200 transition-all border-b border-border-custom last:border-0"
                       >
                         <div className="w-10 h-10 rounded-xl bg-sand-100 relative overflow-hidden shrink-0">
-                          <Image 
-                            src={p.imageUrl} 
-                            alt={p.name} 
-                            fill
-                            className="object-cover" 
-                            sizes="40px"
-                          />
+                          <div className="w-full h-full flex items-center justify-center text-xl">📦</div>
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="text-sm font-semibold text-warm-dark truncate">{p.name}</div>

@@ -68,14 +68,8 @@ export default function Footer() {
           {/* Brand column */}
           <div className="lg:col-span-2 space-y-6">
             <Link href="/" className="flex items-center gap-2.5 group w-fit">
-              <div className="relative w-24 h-24 mx-auto mb-6">
-                <Image 
-                  src="/assets/brand/logo-premium.png"
-                  alt="SuperMarket Premium Logo"
-                  fill
-                  className="object-contain"
-                  priority
-                />
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/30">
+                <ShoppingCart size={20} className="text-white" strokeWidth={2.5} />
               </div>
               <div>
                 <div className="font-black text-xl leading-none text-white italic" style={{ fontFamily: 'Times New Roman, serif' }}>

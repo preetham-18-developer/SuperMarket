@@ -1,7 +1,5 @@
 # 🌌 SuperMarket — Premium Grocery SaaS ✨
 
-![SuperMarket Hero Banner](./public/assets/brand/hero-banner.png)
-
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-Auth%20%26%20Database-blueviolet?style=for-the-badge&logo=supabase)](https://supabase.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
@@ -72,7 +70,6 @@ NEXT_PUBLIC_ADMIN_EMAIL=connectwithpreetham@gmail.com
 ```
 
 ### 3. Install & Launch
-// turbo
 ```bash
 npm install
 npm run dev
