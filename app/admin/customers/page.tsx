@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 
 const MOCK_CUSTOMERS = [
-  { id: 'u001', name: 'Preetham Kumar', email: 'preetham@email.com', phone: '+91 98765 43210', totalSpent: 28450, totalOrders: 12, lastOrder: '2026-04-03', status: 'active', role: 'admin' },
+  { id: 'u001', name: 'Preetham Goud', email: 'preetham@email.com', phone: '+91 98765 43210', totalSpent: 28450, totalOrders: 12, lastOrder: '2026-04-03', status: 'active', role: 'admin' },
   { id: 'u002', name: 'Anjali Sharma', email: 'anjali@email.com', phone: '+91 98760 00000', totalSpent: 12400, totalOrders: 8, lastOrder: '2026-04-02', status: 'active', role: 'customer' },
   { id: 'u003', name: 'Rahul Varma', email: 'rahul@email.com', phone: '+91 98761 11111', totalSpent: 4500, totalOrders: 3, lastOrder: '2026-03-28', status: 'inactive', role: 'customer' },
   { id: 'u004', name: 'Sita Rani', email: 'sita@email.com', phone: '+91 98762 22222', totalSpent: 18900, totalOrders: 15, lastOrder: '2026-04-04', status: 'active', role: 'customer' },

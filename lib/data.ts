@@ -326,7 +326,7 @@ export const PRODUCTS: Product[] = [
 
 export const RECENT_ORDERS: Order[] = [
   {
-    id: 'ord001', orderNumber: 'AG-2026-4821', customerId: 'u001', customerName: 'Preetham Kumar', customerEmail: 'preetham@email.com',
+    id: 'ord001', orderNumber: 'AG-2026-4821', customerId: 'u001', customerName: 'Preetham Goud', customerEmail: 'preetham@email.com',
     items: [
       { productId: 'p001', productName: 'Organic Alphonso Mangoes', product_name: 'Organic Alphonso Mangoes', sku: 'AG-FV-001', imageUrl: PRODUCTS[0].imageUrl, quantity: 2, mrp: 180, price: 149, total: 298 },
     ],

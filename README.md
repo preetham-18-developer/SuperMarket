@@ -100,4 +100,5 @@ This project is built with a **Zero-Trust Administrative Model**. Access to `/ad
 ## 🤝 Contributing
 We love contributors! Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for our coding standards.
 
-Made with ❤️ by [Preetham Kumar](https://github.com/preetham-18-developer)
+Made with ❤️ by [Preetham Goud](https://github.com/preetham-18-developer)
+Copyright (c) 2026 Preetham Goud

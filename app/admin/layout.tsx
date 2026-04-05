@@ -195,10 +195,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Footer / User Profile */}
             <div className="p-4 border-t border-border-custom mt-auto">
                 <div className={`flex items-center gap-3 p-3 rounded-2xl bg-sand-100/50 ${collapsed ? 'justify-center' : ''}`}>
-                   <div className="w-10 h-10 rounded-xl bg-espresso flex items-center justify-center text-white font-black shrink-0">PK</div>
+                   <div className="w-10 h-10 rounded-xl bg-espresso flex items-center justify-center text-white font-black shrink-0">PG</div>
                    {!collapsed && (
                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-black text-warm-dark truncate">Preetham Kumar</p>
+                        <p className="text-xs font-black text-warm-dark truncate">Preetham Goud</p>
                         <p className="text-[10px] font-black text-foreground-muted uppercase tracking-widest truncate">Root Admin</p>
                      </div>
                    )}
