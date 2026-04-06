@@ -15,8 +15,10 @@ import {
   SlidersHorizontal,
   LayoutGrid,
   ShoppingBag,
-  Star
+  Star,
+  ChevronLeft
 } from 'lucide-react';
+import Link from 'next/link';
 import { PRODUCTS, CATEGORIES } from '@/lib/data';
 import dynamic from 'next/dynamic';
 import { useDebounce } from '@/lib/hooks/useDebounce';
@@ -86,6 +88,22 @@ function ProductsContent() {
 
   return (
     <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-10 space-y-8 perf-gpu no-scroll-jank">
+      {/* Back to Home & Title */}
+      <div className="flex items-center gap-4 mb-6">
+        <Link href="/">
+           <motion.button 
+             whileHover={{ scale: 1.05 }}
+             whileTap={{ scale: 0.95 }}
+             className="flex items-center gap-3 px-5 h-11 rounded-2xl bg-white border border-border-custom text-foreground-muted hover:bg-primary hover:text-white transition-all shadow-sm font-black text-xs uppercase tracking-widest"
+           >
+             <ChevronLeft size={18} />
+             Home
+           </motion.button>
+        </Link>
+        <span className="w-1.5 h-1.5 rounded-full bg-foreground/10" />
+        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/30">Store Catalog</p>
+      </div>
+
       {/* Search & Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="space-y-4 flex-1 max-w-xl">
@@ -95,7 +113,7 @@ function ProductsContent() {
               : CATEGORIES.find(c => c.id === selectedCategory)?.name || 'Products'
             }
           </h1>
-          <div className="relative group overflow-hidden rounded-2xl border border-border-custom bg-white transition-all focus-within:ring-4 focus-within:ring-primary/10">
+          <div className="relative group overflow-hidden rounded-2xl border border-border-strong bg-white transition-all focus-within:ring-4 focus-within:ring-primary/10">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground-muted" size={18} />
             <input 
               type="text"

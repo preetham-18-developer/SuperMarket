@@ -56,6 +56,7 @@ interface StoreState {
   toast: Toast;
   cartDrawerOpen: boolean;
   searchQuery: string;
+  introShown: boolean;
 
   // Cart actions
   addToCart: (product: Product) => void;
@@ -89,6 +90,7 @@ interface StoreState {
   setCartDrawerOpen: (open: boolean) => void;
   setSearchQuery: (q: string) => void;
   setDefaultAddress: (addressId: string) => void;
+  setIntroShown: (shown: boolean) => void;
 }
 
 // ─── STORE ───────────────────────────────────────────────────────────────────
@@ -106,6 +108,7 @@ export const useStore = create<StoreState>()(
       toast: { show: false, message: '', type: 'success' },
       cartDrawerOpen: false,
       searchQuery: '',
+      introShown: false,
 
       // ── Cart ──────────────────────────────────────────────────────────────
 
@@ -268,6 +271,7 @@ export const useStore = create<StoreState>()(
 
       setCartDrawerOpen: (open) => set({ cartDrawerOpen: open }),
       setSearchQuery: (q) => set({ searchQuery: q }),
+      setIntroShown: (shown) => set({ introShown: shown }),
     }),
     {
       name: 'anti-gravity-store',

@@ -26,8 +26,8 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 md:px-8">
-      {/* Breadcrumbs / Back */}
-      <div className="flex items-center gap-4 mb-10">
+      {/* Navigation Actions */}
+      <div className="flex flex-wrap items-center gap-4 mb-10">
         <motion.button 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -37,10 +37,23 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
           <ChevronLeft size={20} />
           Go Back
         </motion.button>
-        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-foreground/30">
-            <span>Store</span>
+
+        <Link href="/">
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-3 px-6 h-12 rounded-2xl bg-orange-50 border border-primary/20 text-primary hover:bg-primary hover:text-white transition-all shadow-sm font-black text-xs uppercase tracking-widest"
+          >
+            🏠 Home
+          </motion.button>
+        </Link>
+
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-foreground/30 ml-auto">
+            <Link href="/" className="hover:text-primary transition-colors">Store</Link>
             <span>/</span>
-            <span>{product.category_id?.replace('-', ' ') || product.categoryId?.replace('-', ' ') || 'General'}</span>
+            <Link href={`/products?category=${product.category_id || product.categoryId}`} className="hover:text-primary transition-colors">
+              {product.category_id?.replace('-', ' ') || product.categoryId?.replace('-', ' ') || 'General'}
+            </Link>
             <span>/</span>
             <span className="text-foreground">{product.name}</span>
         </div>

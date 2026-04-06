@@ -4,13 +4,14 @@ import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useStore, PRODUCTS, CATEGORIES } from '@/lib/store';
 import {
   ArrowRight, Sparkles, ChevronLeft, ChevronRight,
   Truck, ShieldCheck, Clock, Star, Zap
 } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import {
-  PRODUCTS, CATEGORIES, BANNERS,
+  BANNERS,
   getFeaturedProducts, getBestSellers, getDeals, getNewArrivals
 } from '@/lib/data';
 import dynamic from 'next/dynamic';
@@ -41,7 +42,8 @@ const productFetcher = (key: string) => {
 export default function Home() {
   const [bannerIdx, setBannerIdx] = useState(0);
   const [activeCategory, setActiveCategory] = useState('all');
-  const [showIntro, setShowIntro] = useState(true);
+  const introShown = useStore((s) => s.introShown);
+  const setIntroShown = useStore((s) => s.setIntroShown);
 
   // ── SWR FOR CATEGORY BROWSING (PHASE 6: UX Optimization) ──
   const { data: categoryProducts, error, isLoading } = useSWR(
@@ -50,15 +52,8 @@ export default function Home() {
     { revalidateOnFocus: false, dedupingInterval: 60000 }
   );
 
-  // Check if intro has been shown this session
-  useEffect(() => {
-    const hasShown = sessionStorage.getItem('supermarket-intro-shown');
-    if (hasShown) setShowIntro(false);
-  }, []);
-
   const handleIntroComplete = () => {
-    setShowIntro(false);
-    sessionStorage.setItem('supermarket-intro-shown', 'true');
+    setIntroShown(true);
   };
 
   // Auto-advance hero banner
@@ -77,7 +72,7 @@ export default function Home() {
   return (
     <>
       <AnimatePresence>
-        {showIntro && (
+        {!introShown && (
           <div className="fixed inset-0 z-[9999]">
             <IntroAnimation onComplete={handleIntroComplete} />
           </div>
@@ -86,7 +81,7 @@ export default function Home() {
 
       <motion.div 
         initial={{ opacity: 0 }}
-        animate={{ opacity: showIntro ? 0 : 1 }}
+        animate={{ opacity: !introShown ? 0 : 1 }}
         transition={{ duration: 0.8, delay: 0.2 }}
         className="max-w-[1400px] mx-auto px-4 lg:px-8 space-y-20 pb-24 no-scroll-jank"
       >
