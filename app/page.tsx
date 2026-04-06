@@ -15,7 +15,9 @@ import {
 } from '@/lib/data';
 import dynamic from 'next/dynamic';
 const IntroAnimation = dynamic(() => import('@/components/IntroAnimation').then((mod) => mod.IntroAnimation), { ssr: false });
-
+import useSWR from 'swr';
+import { ProductGridSkeleton } from '@/components/ProductSkeleton';
+import { getActiveProducts } from '@/lib/api-client';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
@@ -30,17 +32,28 @@ const fadeUp = {
   }),
 };
 
+// ── SWR FETCHER ──
+const productFetcher = (key: string) => {
+  const [_, catId] = key.split(':');
+  return getActiveProducts({ category: catId === 'all' ? undefined : catId, limit: 12 });
+};
+
 export default function Home() {
   const [bannerIdx, setBannerIdx] = useState(0);
   const [activeCategory, setActiveCategory] = useState('all');
   const [showIntro, setShowIntro] = useState(true);
 
+  // ── SWR FOR CATEGORY BROWSING (PHASE 6: UX Optimization) ──
+  const { data: categoryProducts, error, isLoading } = useSWR(
+    `products:${activeCategory}`, 
+    productFetcher,
+    { revalidateOnFocus: false, dedupingInterval: 60000 }
+  );
+
   // Check if intro has been shown this session
   useEffect(() => {
     const hasShown = sessionStorage.getItem('supermarket-intro-shown');
-    if (hasShown) {
-      setShowIntro(false);
-    }
+    if (hasShown) setShowIntro(false);
   }, []);
 
   const handleIntroComplete = () => {
@@ -48,23 +61,16 @@ export default function Home() {
     sessionStorage.setItem('supermarket-intro-shown', 'true');
   };
 
-
   // Auto-advance hero banner
   useEffect(() => {
     const t = setInterval(() => setBannerIdx((i) => (i + 1) % BANNERS.length), 5000);
     return () => clearInterval(t);
   }, []);
 
-  const featuredProducts = getFeaturedProducts();
+  const featuredProducts = getFeaturedProducts().slice(0, 8);
   const bestSellers      = getBestSellers().slice(0, 8);
   const deals            = getDeals().slice(0, 8);
   const newArrivals      = getNewArrivals().slice(0, 4);
-
-  const categoryProducts = useMemo(() => {
-    return activeCategory === 'all'
-      ? PRODUCTS.filter((p: any) => p.status === 'active').slice(0, 12)
-      : PRODUCTS.filter((p: any) => (p.categoryId === activeCategory || p.category_id === activeCategory) && p.status === 'active');
-  }, [activeCategory]);
 
   const banner = BANNERS[bannerIdx];
 
@@ -328,10 +334,14 @@ export default function Home() {
             transition={{ duration: 0.25 }}
             className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
           >
-            {categoryProducts.map((p) => <ProductCard key={p.id} product={p} />)}
+            {isLoading ? (
+              <ProductGridSkeleton count={8} />
+            ) : (
+              categoryProducts?.map((p) => <ProductCard key={p.id} product={p} />)
+            )}
           </motion.div>
         </AnimatePresence>
-        {activeCategory !== 'all' && categoryProducts.length === 0 && (
+        {activeCategory !== 'all' && !isLoading && categoryProducts?.length === 0 && (
           <div className="text-center py-16 text-foreground-muted">
             <p className="text-5xl mb-4">🔍</p>
             <p className="font-bold">No products found in this category yet.</p>

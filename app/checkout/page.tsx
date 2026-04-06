@@ -89,62 +89,32 @@ function CheckoutContent() {
     setLoading(true);
     try {
       const user = useStore.getState().user;
-      const { data: orderData, error: orderError } = await supabase
-        .from('orders')
-        .insert({
-          user_id: user?.id || null,
-          status: 'pending',
-          total_amount: totalPrice,
-          delivery_slot: activeSlot.time,
+      // ── PHASE 1 UPGRADE: Use Express Backend ──
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+      const orderResponse = await fetch(`${backendUrl}/api/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userData: user,
+          cart: cart.map(i => ({
+            id: i.id,
+            quantity: i.quantity,
+            price: i.price ?? i.mrp,
+            name: i.name
+          })),
           address: formData.address,
           phone: formData.phone,
-          payment_status: 'paid' // Assuming payment was successful via Razorpay handler
+          paymentInfo: { status: 'paid' } // In real-world, include Razorpay signal here
         })
-        .select()
-        .single();
+      });
 
-      if (orderError) throw orderError;
-
-      // Insert Items
-      const orderItems = cart.map(item => ({
-        order_id: orderData.id,
-        product_id: item.id,
-        quantity: item.quantity,
-        unit_price: item.price ?? item.mrp
-      }));
-
-      const orderNumber = `SM-${Math.floor(100000 + Math.random() * 900000)}`;
-      let orderId = orderNumber;
-
-      // ── 1. Try saving order to Supabase (non-blocking) ────────────────────
-      try {
-        const { data: orderData, error: orderError } = await supabase
-          .from('orders')
-          .insert({
-            user_id: user?.id || null,
-            status: 'pending',
-            total_amount: totalPrice,
-            delivery_slot: activeSlot.time,
-            address: formData.address,
-            phone: formData.phone,
-            payment_status: 'paid'
-          })
-          .select()
-          .single();
-
-        if (!orderError && orderData) {
-          orderId = orderData.id;
-          const orderItems = cart.map(item => ({
-            order_id: orderData.id,
-            product_id: item.id,
-            quantity: item.quantity,
-            unit_price: item.price ?? item.mrp
-          }));
-          try { await supabase.from('order_items').insert(orderItems); } catch (_) {}
-        }
-      } catch (dbErr) {
-        console.warn('DB insert skipped (table may not exist):', dbErr);
+      if (!orderResponse.ok) {
+        const errorData = await orderResponse.json();
+        throw new Error(errorData.error || 'Failed to place order via backend');
       }
+
+      const { orderId, orderNumber } = await orderResponse.json();
+
 
       // ── 2. Send confirmation email + WhatsApp (non-blocking) ──────────────
       try {

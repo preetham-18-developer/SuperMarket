@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Package, 
@@ -21,23 +20,38 @@ import {
   RefreshCw,
   Eye
 } from 'lucide-react';
-import { PRODUCTS, CATEGORIES, getInventoryHealth } from '@/lib/data';
+import { CATEGORIES, getInventoryHealth } from '@/lib/data';
+import { getActiveProducts } from '@/lib/api-client';
+import { useEffect, useState, useMemo } from 'react';
 
 export default function AdminProductsPage() {
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [healthFilter, setHealthFilter] = useState('all');
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      const data = await getActiveProducts({ limit: 1000 });
+      // The API returns { data, pagination }, we only need data here
+      setProducts((data as any).data || data);
+      setLoading(false);
+    };
+    fetchProducts();
+  }, []);
+
   const filteredItems = useMemo(() => {
-    return PRODUCTS.filter(p => {
-      const matchSearch = !searchQuery || p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.brand.toLowerCase().includes(searchQuery.toLowerCase());
+    return products.filter(p => {
+      const matchSearch = !searchQuery || p.name.toLowerCase().includes(searchQuery.toLowerCase()) || (p.brand && p.brand.toLowerCase().includes(searchQuery.toLowerCase()));
       const matchCat = selectedCategory === 'all' || p.categoryId === selectedCategory || p.category_id === selectedCategory;
       const health = getInventoryHealth(p);
       const matchHealth = healthFilter === 'all' || health === healthFilter;
       return matchSearch && matchCat && matchHealth;
     });
-  }, [searchQuery, selectedCategory, healthFilter]);
+  }, [products, searchQuery, selectedCategory, healthFilter]);
 
   return (
     <div className="space-y-10 pb-20 px-2 lg:px-6">
@@ -50,7 +64,7 @@ export default function AdminProductsPage() {
               <span className="text-[10px] font-black uppercase tracking-[0.3em]">Lifecycle Management</span>
            </div>
            <h1 className="text-4xl md:text-5xl font-black text-warm-dark tracking-tight">Inventory</h1>
-           <p className="text-foreground-muted font-bold text-sm mt-1 max-w-sm">Manage {PRODUCTS.length} total SKU active in your store.</p>
+           <p className="text-foreground-muted font-bold text-sm mt-1 max-w-sm">Manage {products.length} total SKU active in your store.</p>
         </div>
         
         <div className="flex items-center gap-3">
@@ -63,9 +77,9 @@ export default function AdminProductsPage() {
       {/* Stats Summary Panel */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
          {[
-           { label: 'Live SKU', val: PRODUCTS.length, sub: 'Across 12 cats', icon: Package, color: 'blue' },
-           { label: 'Out of Stock', val: PRODUCTS.filter(p => p.stock === 0).length, sub: 'Needs attention', icon: AlertTriangle, color: 'red' },
-           { label: 'Low Stock', val: PRODUCTS.filter(p => p.stock > 0 && p.stock <= 10).length, sub: 'Reorder soon', icon: History, color: 'orange' },
+           { label: 'Live SKU', val: products.length, sub: 'Across 12 cats', icon: Package, color: 'blue' },
+           { label: 'Out of Stock', val: products.filter(p => p.stock === 0).length, sub: 'Needs attention', icon: AlertTriangle, color: 'red' },
+           { label: 'Low Stock', val: products.filter(p => p.stock > 0 && (p.stock <= 10)).length, sub: 'Reorder soon', icon: History, color: 'orange' },
            { label: 'Archived', val: 0, sub: 'Inactive items', icon: Archive, color: 'sand' },
          ].map(s => (
             <div key={s.label} className="card p-5 border-none shadow-sm hover:shadow-md transition-all group">
